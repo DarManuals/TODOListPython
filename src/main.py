@@ -1,10 +1,15 @@
 from flask import Flask, render_template, jsonify, request, abort
-import MySQLdb as DB
 
-con = DB.connect('127.0.0.1', 'root', '19920517', 'flaskpy');
-cur = con.cursor()
+from flaskext.mysql import MySQL
 
+mysql = MySQL()
 app = Flask(__name__)
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = '19920517'
+app.config['MYSQL_DATABASE_DB'] = 'flaskpy'
+app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
+mysql.init_app(app)
+cur = mysql.connect().cursor()
 
 
 @app.route('/')
