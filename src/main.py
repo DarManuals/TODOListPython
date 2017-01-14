@@ -10,7 +10,6 @@ app.config['MYSQL_DATABASE_DB'] = 'flaskpy'
 app.config['MYSQL_DATABASE_HOST'] = 'pysql'
 mysql.init_app(app)
 con = mysql.connect()
-cur = con.cursor()
 
 
 @app.route('/')
@@ -20,7 +19,9 @@ def index():
 
 @app.route('/tasks')
 def tasks():
+    cur = con.cursor()
     cur.execute("select id, name, priority from tasks order by priority desc")
+    con.commit()
     tasks = []
     for id, name, pr in cur.fetchall():
         task =dict()
@@ -33,6 +34,7 @@ def tasks():
 
 @app.route('/tasks/delete/<task_id>', methods=['POST'])
 def delete(task_id):
+    cur = con.cursor()
     cur.execute('delete from tasks where id=' + task_id)
     con.commit()
     return jsonify({'result': True})
@@ -40,6 +42,7 @@ def delete(task_id):
 
 @app.route('/tasks/add', methods=['POST'])
 def add():
+    cur = con.cursor()
     name = request.form.get('name')
     priority = request.form.get('priority')
     if not name or not priority:
