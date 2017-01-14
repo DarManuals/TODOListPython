@@ -9,7 +9,8 @@ app.config['MYSQL_DATABASE_PASSWORD'] = '19920517'
 app.config['MYSQL_DATABASE_DB'] = 'flaskpy'
 app.config['MYSQL_DATABASE_HOST'] = 'pysql'
 mysql.init_app(app)
-cur = mysql.connect().cursor()
+con = mysql.connect()
+cur = con.cursor()
 
 
 @app.route('/')
@@ -33,6 +34,7 @@ def tasks():
 @app.route('/tasks/delete/<task_id>', methods=['POST'])
 def delete(task_id):
     cur.execute('delete from tasks where id=' + task_id)
+    con.commit()
     return jsonify({'result': True})
 
 
@@ -43,6 +45,7 @@ def add():
     if not name or not priority:
         abort(500)
     cur.execute('insert into tasks values(null, "%s", "%s")' % (name, priority))
+    con.commit()
     return jsonify({'result': True})
 
 if __name__ == '__main__':
