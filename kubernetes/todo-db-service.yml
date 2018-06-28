@@ -1,12 +1,10 @@
 apiVersion: v1
-kind: Service              
+kind: Service
 metadata:
   name: todo-db-service
 spec:
-  type: ClusterIP       
   ports:
-  - port: 80               
-    protocol: TCP          
-    targetPort: 80         
-  selector:                
-    app: todo-db    
+  - port: 3306
+  selector:
+    app: todo-db
+  clusterIP: None
