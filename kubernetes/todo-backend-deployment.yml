@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment                                          
+metadata:
+  name: todo-backend
+spec:
+  replicas: 2                                             
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate                                  
+    rollingUpdate: 
+      maxUnavailable: 1                                   
+      maxSurge: 1                                         
+  template:
+    metadata:
+      labels:
+        app: todo-backend                                  
+    spec:
+      containers:
+        - image: todo-backend
+          imagePullPolicy: IfNotPresent                        
+          name: todo-backend
+          ports:
+            - containerPort: 80
